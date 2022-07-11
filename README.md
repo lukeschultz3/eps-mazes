@@ -4,9 +4,9 @@ Program to generate maze figures
 ## Flags
 | Flag | Syntax | Description |
 | --- | --- | --- |
-| length | -l | Specifies cell length, takes integer for value \ default: 10 |
-| wall mode | -m | Specifies line or cell mode, takes "line" or "cell" for value \ default: line |
-| space mode | -s | Specifies if input contains spaces between each cell or not, takes "t" or "f" for value \ default: True
+| Length | `-l` | Specifies cell length, takes integer for value.<br />Default: `10` |
+| Wall mode | `-m` | Specifies line or cell mode, takes "line" or "cell" for value.<br />Default: `line` |
+| Space mode | `-s` | Specifies if input contains spaces between each cell or not, takes "t" or "f" for value.<br />Default: `True`|
 
 ## Line Mode
 A maze displayed in line mode has lines for walls (as opposed to cells):\
