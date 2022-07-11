@@ -10,3 +10,7 @@ you must turn each line segment into a full sized cell.\
 This is modelled in the image below:
 ![Error Loading Image](/ReadmeAssets/wall-to-cell.jpg)
 When you run the program in line mode, it will properly convert the cell equivalent text to the line maze it represents
+
+## Cell Mode
+A maze displayed in cell mode has walls the same width as paths:\
+![Error loading cell mode image](/ReadmeAssets/cell-mode.jpg)
