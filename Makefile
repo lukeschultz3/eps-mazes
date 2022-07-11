@@ -6,3 +6,6 @@ maze2:
 
 maze3:
 	python3 maze-to-eps.py < maze3.txt > maze3.eps
+
+maze3cell:
+	python3 maze-to-eps.py -m cell < maze3.txt > maze3cell.eps
