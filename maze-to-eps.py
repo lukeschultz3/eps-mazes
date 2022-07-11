@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # convert square maze diagram to .eps file
 # largely copied from Ryan Hayward's gopix
