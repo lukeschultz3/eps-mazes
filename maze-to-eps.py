@@ -68,20 +68,18 @@ if __name__=="__main__":
         if sys.argv[i] == "-l" or sys.argv[i] == "-length":
             try:
                 cell_length = int(sys.argv[i+1])
-            except:
-                print("ERROR: unrecognized argument after length flag")
-                print("Expected INTEGER")
-                exit()
+            except IndexError:
+                pass
+            except ValueError:
+                raise Exception("ERROR: unrecognized argument after length flag. Expected INTEGER") from ValueError
         if sys.argv[i] == "-m" or sys.argv[i] == "-mode":
             try:
                 mode = sys.argv[i+1]
-            except:
-                print("Error: argument needed after mode flag")
-                exit()
+            except IndexError:
+                pass
 
             if mode != "line" and mode != "cell":
-                print("ERROR: mode argument must be either 'line' or 'wall'")
-                exit()
+                raise Exception("ERROR: unrecognized argument after mode flag. Expected 'line' or 'wall'") from ValueError
         if sys.argv[i] == "-s" or sys.argv[i] == "-spaced":
             try:
                 spaced = sys.argv[i+1]
@@ -90,12 +88,9 @@ if __name__=="__main__":
                 elif spaced == "false" or spaced == "False" or spaced == "f" or spaced == "F":
                     spaced = False
                 else:
-                    print("ERROR: unrecognized argument after spaced flag")
-                    print("Expected BOOLEAN")
-                    exit()
-            except:
-                print("ERROR: argument needed after spaced flag")
-                exit()
+                    raise Exception("ERROR: unrecognized argument after spaced flag. Expected BOOLEAN")
+            except IndexError:
+                pass
 
     maze = read_maze()
     if mode == "line":
