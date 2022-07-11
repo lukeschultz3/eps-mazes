@@ -9,3 +9,9 @@ maze3:
 
 maze3cell:
 	python3 maze-to-eps.py -m cell < maze3.txt > maze3cell.eps
+
+maze3nospace:
+	python3 maze-to-eps.py -s f < maze3-no-space.txt > maze3nospace.eps
+
+maze3doublesize:
+	python3 maze-to-eps.py -l 20 < maze3.txt > maze3double.eps
