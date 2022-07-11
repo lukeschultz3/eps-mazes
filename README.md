@@ -3,7 +3,7 @@ Program to generate maze figures
 
 ## I/O & Example Execution
 The input is taken from stdin, and the output is pushed to stdout. To input and output to files, redirect.\
-Example execution
+Example execution:
 `python3 maze-to-eps.py < SampleMazes/maze1.txt > maze1.eps`
 
 ## Flags
