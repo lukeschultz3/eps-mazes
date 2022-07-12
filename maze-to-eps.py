@@ -15,6 +15,7 @@ cell_length = 10    # size of cell (in postscript units)
 mode = "line"       # wall mode, either line or cell
 spaced = True       # True if input has space between characters, false if not
 grid = True         # True if grid coloring is on, false if not
+numbered = False    # True if cell numbers are on, false if not
 
 def read_maze():
     jump = 1
@@ -27,6 +28,25 @@ def read_maze():
         maze.append([])
         for i in range(0, len(row), jump):
             maze[-1].append(row[i])
+        try:
+            row = input()
+        except:
+            break
+
+    return maze
+
+def read_maze_numbered():
+    maze = []
+    row = input()
+    while row != "":
+        maze.append([])
+        last_index = 0
+        for i in range(len(row)):
+            if row[i] == " " and not last_index == i:
+                maze[-1].append(row[last_index:i])
+                last_index = i+1
+        if last_index != len(row):
+            maze[-1].append(row[last_index:])
         try:
             row = input()
         except:
@@ -79,6 +99,22 @@ def print_wall_hori(row, col):
     print("closepath")
     print("stroke")
 
+def print_num(row, col, num):
+    print("newpath")
+    print("/Sans-Serif findfont")
+    print(cell_length//2, "scalefont")
+    print("setfont")
+    if 0 <= int(num) <= 9:
+        print((col+0.07)*cell_length, (row-0.7)*cell_length, "moveto")
+    else:
+        print((col-0.07)*cell_length, (row-0.7)*cell_length, "moveto")
+    print("(", num, ") true charpath")
+    print("closepath")
+    print("0.8 0 0 setrgbcolor")
+    print("stroke")
+    print("0 setgray")
+
+
 if __name__=="__main__":
 
     for i in range(1, len(sys.argv)):
@@ -119,9 +155,23 @@ if __name__=="__main__":
                     raise Exception("ERROR: unrecognized argument after grid flag. Expected BOOLEAN") from ValueError
             except IndexError:
                 pass
+        if sys.argv[i] == "-n" or sys.argv[i] == "-numbered":
+            try:
+                numbered = sys.argv[i+1]
+                if numbered.lower() == "true" or numbered.lower() == "t":
+                    numbered = True
+                elif numbered.lower() == "false" or numbered.lower() == "f":
+                    numbered = False
+                else:
+                    raise Exception("ERROR: unrecognized argument after numbered flag. Expected BOOLEAN") from ValueError
+            except IndexError:
+                pass
 
+    if numbered:
+        maze = read_maze_numbered()
+    else:
+        maze = read_maze()
 
-    maze = read_maze()
     if mode == "line":
         print_head(len(maze)//2, len(maze[0])//2)
         if grid:
@@ -147,9 +197,13 @@ if __name__=="__main__":
                         print_wall_hori(total_rows-row, col)
                     elif j % 2 == 0:
                         print_wall_vert(total_rows-row, col)
+                elif numbered and not maze[i][j] == " ":
+                    print_num(total_rows-row, col, int(maze[i][j]))
             else:
                 if maze[i][j] == "x" or maze[i][j] == "X":
                     print_cell(total_rows - i, j)
+                elif numbered and not maze[i][j] == " ":
+                    print_num(total_rows-i, j, int(maze[i][j]))
 
     print("showpage")
 

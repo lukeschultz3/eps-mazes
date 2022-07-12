@@ -16,5 +16,11 @@ maze3nospace:
 maze3doublesize:
 	python3 maze-to-eps.py -l 20 < SampleMazes/maze3.txt > maze3double.eps
 
+maze4:
+	python3 maze-to-eps.py -l 30 -n t -m cell < SampleMazes/maze4.txt > maze4.eps
+
+maze5:
+	python3 maze-to-eps.py -l 30 -n t < SampleMazes/maze5.txt > maze5.eps
+
 clean:
 	rm *.eps

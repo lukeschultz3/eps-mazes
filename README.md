@@ -13,6 +13,7 @@ Example execution:
 | Wall Mode | `-m` | Specifies line or cell mode, takes `line` or `cell` for value.<br />Default: `line` |
 | Spaced Input  | `-s` | Specifies if input contains spaces between each cell or not, takes `t` or `f` for value.<br />Default: `t`|
 | Grid Coloring | `-g` | Toggles grid coloring to distinguish cells, takes `t` or `f` for value.<br />Default: `t`|
+| Numbered | `-n` | Specifies if the cells are numbered, takes `t` or `f` for value.<br />Default: `t`|
 
 ## Line Mode
 A maze displayed in line mode has lines for walls (as opposed to cells):\
