@@ -6,7 +6,7 @@
 #
 # written by Luke Schultz
 # created on July 5, 2022
-# last edited on July 11, 2022
+# last edited on July 12, 2022
 
 
 import sys
@@ -14,6 +14,7 @@ import sys
 cell_length = 10    # size of cell (in postscript units)
 mode = "line"       # wall mode, either line or cell
 spaced = True       # True if input has space between characters, false if not
+grid = True         # True if grid coloring is on, false if not
 
 def read_maze():
     jump = 1
@@ -38,6 +39,22 @@ def print_head(rows, cols):
     print("%%BoundingBox: 0 0", cols*cell_length, rows*cell_length)
     print("%%Pages: 0")
     print("%%EndComments")
+
+def print_grid(rows, cols):
+    for row in range(rows):
+        for col in range(cols):
+            print("newpath")
+            print(col*cell_length, row*cell_length, "moveto")
+            print((col+1)*cell_length, row*cell_length, "lineto")
+            print((col+1)*cell_length, (row+1)*cell_length, "lineto")
+            print(col*cell_length, (row+1)*cell_length, "lineto")
+            print("closepath")
+            if (row+col) % 2 == 0:
+                print("0.95 setgray")
+            else:
+                print("0.9 setgray")
+            print("fill")
+    print("0 setgray")
 
 def print_cell(row, col):
     print("newpath")
@@ -88,16 +105,32 @@ if __name__=="__main__":
                 elif spaced == "false" or spaced == "False" or spaced == "f" or spaced == "F":
                     spaced = False
                 else:
-                    raise Exception("ERROR: unrecognized argument after spaced flag. Expected BOOLEAN")
+                    raise Exception("ERROR: unrecognized argument after spaced flag. Expected BOOLEAN") from ValueError
             except IndexError:
                 pass
+        if sys.argv[i] == "-g" or sys.argv[i] == "-grid":
+            try:
+                grid = sys.argv[i+1]
+                if grid == "true" or grid == "True" or grid == "t" or grid == "T" or grid == "on":
+                    grid = True
+                elif grid == "false" or grid == "False" or grid == "f" or grid == "F" or grid == "off":
+                    grid = False
+                else:
+                    raise Exception("ERROR: unrecognized argument after grid flag. Expected BOOLEAN") from ValueError
+            except IndexError:
+                pass
+
 
     maze = read_maze()
     if mode == "line":
         print_head(len(maze)//2, len(maze[0])//2)
+        if grid:
+            print_grid(len(maze)//2, len(maze[0])//2)
         total_rows = len(maze)//2
     else:
         print_head(len(maze), len(maze[0]))
+        if grid:
+            print_grid(len(maze), len(maze[0]))
         total_rows = len(maze)
 
     row = 0

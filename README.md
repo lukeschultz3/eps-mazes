@@ -10,8 +10,9 @@ Example execution:
 | Flag | Syntax | Description |
 | --- | --- | --- |
 | Length | `-l` | Specifies cell length, takes integer for value.<br />Default: `10` |
-| Wall mode | `-m` | Specifies line or cell mode, takes "line" or "cell" for value.<br />Default: `line` |
-| Space mode | `-s` | Specifies if input contains spaces between each cell or not, takes "t" or "f" for value.<br />Default: `True`|
+| Wall Mode | `-m` | Specifies line or cell mode, takes `line` or `cell` for value.<br />Default: `line` |
+| Spaced Input  | `-s` | Specifies if input contains spaces between each cell or not, takes `t` or `f` for value.<br />Default: `t`|
+| Grid Coloring | `-g` | Toggles grid coloring to distinguish cells, takes `t` or `f` for value.<br />Default: `t`|
 
 ## Line Mode
 A maze displayed in line mode has lines for walls (as opposed to cells):\
