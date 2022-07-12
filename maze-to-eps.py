@@ -61,6 +61,7 @@ def print_head(rows, cols):
     print("%%Pages: 0")
     print("%%EndComments")
     print(line_width, "setlinewidth")
+    print("1 setlinejoin")
 
 def print_grid(rows, cols):
     for row in range(rows):
