@@ -14,6 +14,7 @@ Example execution:
 | Spaced Input  | `-s` | Specifies if input contains spaces between each cell or not, takes `t` or `f` for value.<br />Default: `t`|
 | Grid Coloring | `-g` | Toggles grid coloring to distinguish cells, takes `t` or `f` for value.<br />Default: `t`|
 | Numbered | `-n` | Specifies if the cells are numbered, takes `t` or `f` for value.<br />Default: `t`|
+| Line Weight | `-w`| Specifies line wall weight, takes float for value<br />Default: `1` |
 
 ## Line Mode
 A maze displayed in line mode has lines for walls (as opposed to cells):\

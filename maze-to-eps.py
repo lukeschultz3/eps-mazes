@@ -16,6 +16,7 @@ mode = "line"       # wall mode, either line or cell
 spaced = True       # True if input has space between characters, false if not
 grid = True         # True if grid coloring is on, false if not
 numbered = False    # True if cell numbers are on, false if not
+line_width = 1      # line width
 
 def read_maze():
     jump = 1
@@ -59,6 +60,7 @@ def print_head(rows, cols):
     print("%%BoundingBox: 0 0", cols*cell_length, rows*cell_length)
     print("%%Pages: 0")
     print("%%EndComments")
+    print(line_width, "setlinewidth")
 
 def print_grid(rows, cols):
     for row in range(rows):
@@ -100,6 +102,7 @@ def print_wall_hori(row, col):
     print("stroke")
 
 def print_num(row, col, num):
+    print("1 setlinewidth")
     print("newpath")
     print("/Sans-Serif findfont")
     print(cell_length//2, "scalefont")
@@ -113,6 +116,7 @@ def print_num(row, col, num):
     print("0.8 0 0 setrgbcolor")
     print("stroke")
     print("0 setgray")
+    print(line_width, "setlinewidth")
 
 
 if __name__=="__main__":
@@ -164,6 +168,13 @@ if __name__=="__main__":
                     numbered = False
                 else:
                     raise Exception("ERROR: unrecognized argument after numbered flag. Expected BOOLEAN") from ValueError
+            except IndexError:
+                pass
+        if sys.argv[i] == "-w" or sys.argv[i] == "-weight":
+            try:
+                line_width = float(sys.argv[i+1])
+            except ValueError:
+                raise Exception("ERROR: unrecognized argument after weight flag. Expected FLOAT") from ValueError
             except IndexError:
                 pass
 
