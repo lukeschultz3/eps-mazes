@@ -25,5 +25,16 @@ maze5:
 maze6:
 	python3 maze-to-eps.py < SampleMazes/maze6.txt > maze6.eps
 
+all:
+	make maze1
+	make maze2
+	make maze3
+	make maze3cell
+	make maze3nospace
+	make maze3doublesize
+	make maze4
+	make maze5
+	make maze6
+
 clean:
 	rm *.eps
