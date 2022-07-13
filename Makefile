@@ -22,5 +22,8 @@ maze4:
 maze5:
 	python3 maze-to-eps.py -l 30 -n t < SampleMazes/maze5.txt > maze5.eps
 
+maze6:
+	python3 maze-to-eps.py < SampleMazes/maze6.txt > maze6.eps
+
 clean:
 	rm *.eps

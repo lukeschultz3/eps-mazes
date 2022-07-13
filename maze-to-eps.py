@@ -79,14 +79,16 @@ def print_grid(rows, cols):
             print("fill")
     print("0 setgray")
 
-def print_cell(row, col):
+def print_cell(row, col, color=(0,0,0)):
     print("newpath")
     print(col*cell_length, row*cell_length, "moveto")
     print((col+1)*cell_length, row*cell_length, "lineto")
     print((col+1)*cell_length, (row-1)*cell_length, "lineto")
     print(col*cell_length, (row-1)*cell_length, "lineto")
     print("closepath")
+    print(color[0], color[1], color[2], "setrgbcolor")
     print("fill")
+    print("0 0 0 setrgbcolor")
 
 def print_wall_vert(row, col):
     print("newpath")
@@ -202,7 +204,27 @@ if __name__=="__main__":
             if mode == "line":
                 row = i // 2
                 col = j // 2
-                if maze[i][j] == "x" or maze[i][j] == "X":
+            elif mode == "cell":
+                row = i
+                col = j
+
+            if maze[i][j].lower() == "w":
+                print_cell(total_rows - row, col, (255, 255, 255))
+            elif maze[i][j].lower() == "s":
+                print_cell(total_rows - row, col, (0, 255, 0))
+            elif maze[i][j].lower() == "g":
+                print_cell(total_rows - row, col, (255, 0, 0))
+            elif numbered and not maze[i][j] == " " and not maze[i][j].lower() == "x":
+                print_num(total_rows-row, col, int(maze[i][j]))
+
+    row = 0
+    col = 0
+    for i in range(len(maze)):
+        for j in range(len(maze[i])):
+            if mode == "line":
+                row = i // 2
+                col = j // 2
+                if maze[i][j].lower() == "x":
                     if i % 2 == 0 and j % 2 == 0:
                         continue
                     if i % 2 == 0:
@@ -210,12 +232,14 @@ if __name__=="__main__":
                     elif j % 2 == 0:
                         print_wall_vert(total_rows-row, col)
                 elif numbered and not maze[i][j] == " ":
-                    print_num(total_rows-row, col, int(maze[i][j]))
+                    pass
+                    #print_num(total_rows-row, col, int(maze[i][j]))
             else:
-                if maze[i][j] == "x" or maze[i][j] == "X":
+                if maze[i][j].lower() == "x":
                     print_cell(total_rows - i, j)
                 elif numbered and not maze[i][j] == " ":
-                    print_num(total_rows-i, j, int(maze[i][j]))
+                    pass
+                    #print_num(total_rows-i, j, int(maze[i][j]))
 
     print("showpage")
 
