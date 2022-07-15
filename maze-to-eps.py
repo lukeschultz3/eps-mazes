@@ -6,19 +6,20 @@
 #
 # written by Luke Schultz
 # created on July 5, 2022
-# last edited on July 13, 2022
+# last edited on July 15, 2022
 
 
 import sys
 
 ERROR_MSG = "ERROR: unrecognized argument after flag:"
 
-cell_length = 10    # size of cell (in postscript units)
+cell_length = 20    # size of cell (in postscript units)
 mode = "line"       # wall mode, either line or cell
 spaced = True       # True if input has space between characters, false if not
 grid = True         # True if grid coloring is on, false if not
 numbered = False    # True if cell numbers are on, false if not
 line_width = 1      # line width
+labels = False      # True if grid labels on, false if not
 
 def read_maze():
     maze = []
@@ -45,7 +46,12 @@ def read_maze():
 
 def print_head(rows, cols):
     print("%!PS-Adobe-3.0 EPSF-3.0")
-    print("%%BoundingBox: 0 0", cols*cell_length, rows*cell_length)
+    if labels:
+        print("%%BoundingBox:", -cell_length//2, -line_width,
+              cols*cell_length+line_width, rows*cell_length+line_width+(cell_length//2))
+    else:
+        print("%%BoundingBox:", -line_width, -line_width,
+              cols*cell_length+line_width, rows*cell_length+line_width)
     print("%%Pages: 0")
     print("%%EndComments")
     print(line_width, "setlinewidth")
@@ -96,7 +102,7 @@ def print_num(row, col, num):
     print("1 setlinewidth")
     print("newpath")
     print("/Sans-Serif findfont")
-    print(cell_length//2, "scalefont")
+    print(cell_length//4, "scalefont")  # TODO: add flag to adjust
     print("setfont")
     if 0 <= int(num) <= 9:
         print((col+0.07)*cell_length, (row-0.7)*cell_length, "moveto")
@@ -109,6 +115,29 @@ def print_num(row, col, num):
     print("0 setgray")
     print(line_width, "setlinewidth")
 
+def print_labels(rows, cols):
+    print("0.8 0 0 setrgbcolor")
+    print("1 setlinewidth")
+    print("/Sans-Serif findfont")
+    print(cell_length//2, "scalefont")
+    print("setfont")
+
+    for col in range(cols):
+        print("newpath")
+        print(col*cell_length, rows*cell_length+(cell_length*0.2), "moveto")
+        print("(", chr((col%26)+65), ") true charpath")
+        print("closepath")
+        print("stroke")
+
+    for row in range(rows):
+        print("newpath")
+        print(-(cell_length*0.75), (rows-row-0.75)*(cell_length), "moveto")
+        print("(", row+1, ") true charpath")
+        print("closepath")
+        print("stroke")
+
+    print("0 setgray")
+    print(line_width, "setlinewidth")
 
 if __name__=="__main__":
 
@@ -168,6 +197,17 @@ if __name__=="__main__":
                 raise Exception(ERROR_MSG, "weight flag. Expected FLOAT") from ValueError
             except IndexError:
                 pass
+        if sys.argv[i] == "-c":
+            try:
+                labels = sys.argv[i+1]
+                if labels.lower() == "true" or labels.lower() == "t":
+                    labels = True
+                elif labels.lower() == "false" or labels.lower() == "f":
+                    labels = False
+                else:
+                    raise Exception(ERROR_MSG) from ValueError
+            except IndexError:
+                pass
 
     assert(not (spaced == False and numbered == True))  # TODO: change flags, avoid this
 
@@ -185,6 +225,9 @@ if __name__=="__main__":
     # display grid
     if grid:
         print_grid(total_rows, total_cols)
+
+    if labels:
+        print_labels(total_rows, total_cols)
 
     # display everything that isn't a wall
     row = 0
@@ -205,7 +248,13 @@ if __name__=="__main__":
             elif maze[i][j].lower() == "g":
                 print_cell(total_rows - row, col, (255, 0, 0))
             elif numbered and not maze[i][j] == " " and not maze[i][j].lower() == "x":
-                print_num(total_rows-row, col, int(maze[i][j]))
+                try:
+                    print_num(total_rows-row, col, int(maze[i][j]))
+                except:
+                    try:
+                        print_num(total_rows-row, col, float(maze[i][j]))
+                    except:
+                        exit()
 
     # display walls
     # note: display walls after everything else to improve visuals
