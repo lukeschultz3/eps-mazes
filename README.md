@@ -9,13 +9,13 @@ Example execution:
 ## Flags
 | Flag | Syntax | Description |
 | --- | --- | --- |
-| Length | `-l` | Specifies cell length, takes integer for value.<br />Default: `10` |
+| Cell Size | `-c` | Specifies cell size, takes integer for value.<br />Default: `10` |
 | Wall Mode | `-m` | Specifies line or cell mode, takes `line` or `cell` for value.<br />Default: `line` |
-| Spaced Input  | `-s` | Specifies if input contains spaces between each cell or not, takes `t` or `f` for value.<br />Default: `t`|
-| Grid Coloring | `-g` | Toggles grid coloring to distinguish cells, takes `t` or `f` for value.<br />Default: `t`|
-| Numbered | `-n` | Specifies if the cells are numbered, takes `t` or `f` for value.<br />Default: `t`|
+| Spaced Input  | `-s` | Toggles spaced input, meaning the input file has spaces between each cell. |
+| Grid Coloring | `-g` | Enables grid coloring to distinguish cells. |
+| Numbered | `-n` | Enables cell numbering.<br />Note that the input file must contain cell numbers. |
 | Line Weight | `-w`| Specifies line wall weight, takes float for value<br />Default: `1` |
-| Labels | `-c` | Toggles grid labels, takes `t` or `f` for value.<br />Default: `f` |
+| Labels | `-c` | Enables grid labels |
 
 ## Line Mode
 A maze displayed in line mode has lines for walls (as opposed to cells):\

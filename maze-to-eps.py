@@ -1,25 +1,25 @@
 #!/usr/bin/env python3
 
 # convert square maze diagram to .eps file
-# largely copied from Ryan Hayward's gopix
+# built off of Ryan Hayward's gopix
 # https://github.com/ryanbhayward/gopix
 #
 # written by Luke Schultz
 # created on July 5, 2022
-# last edited on July 15, 2022
+# last edited on August 8, 2022
 
 
 import sys
 
 ERROR_MSG = "ERROR: unrecognized argument after flag:"
 
-cell_length = 20    # size of cell (in postscript units)
-mode = "line"       # wall mode, either line or cell
-spaced = True       # True if input has space between characters, false if not
-grid = True         # True if grid coloring is on, false if not
-numbered = False    # True if cell numbers are on, false if not
-line_width = 1      # line width
-labels = False      # True if grid labels on, false if not
+cell_length = 20        # size of cell (in postscript units)
+line_width  = 1         # line width
+mode        = "line"    # wall mode, either line or cell
+spaced      = False     # True if input has space between characters, False if not
+grid        = False     # True if grid coloring is on, False if not
+numbered    = False     # True if cell numbers are on, False if not
+labels      = False     # True if grid labels on, False if not
 
 def read_maze():
     maze = []
@@ -102,7 +102,7 @@ def print_num(row, col, num):
     print("1 setlinewidth")
     print("newpath")
     print("/Sans-Serif findfont")
-    print(cell_length//4, "scalefont")  # TODO: add flag to adjust
+    print(cell_length//2, "scalefont")  # TODO: add flag to adjust
     print("setfont")
     if 0 <= int(num) <= 9:
         print((col+0.07)*cell_length, (row-0.7)*cell_length, "moveto")
@@ -142,14 +142,14 @@ def print_labels(rows, cols):
 if __name__=="__main__":
 
     for i in range(1, len(sys.argv)):
-        if sys.argv[i] == "-l" or sys.argv[i] == "-length":
+        if sys.argv[i].lower() == "-c" or sys.argv[i].lower() == "-cell":
             try:
                 cell_length = int(sys.argv[i+1])
             except IndexError:
                 pass
             except ValueError:
                 raise Exception(ERROR_MSG, "length. Expected INTEGER") from ValueError
-        if sys.argv[i] == "-m" or sys.argv[i] == "-mode":
+        if sys.argv[i].lower() == "-m" or sys.argv[i].lower() == "-mode":
             try:
                 mode = sys.argv[i+1]
             except IndexError:
@@ -157,59 +157,22 @@ if __name__=="__main__":
 
             if mode != "line" and mode != "cell":
                 raise Exception(ERROR_MSG, "mode. Expected 'line' or 'wall'") from ValueError
-        if sys.argv[i] == "-s" or sys.argv[i] == "-spaced":
-            try:
-                spaced = sys.argv[i+1]
-                if spaced.lower() == "true" or spaced.lower() == "t":
-                    spaced = True
-                elif spaced.lower() == "false" or spaced.lower() == "f":
-                    spaced = False
-                else:
-                    raise Exception(ERROR_MSG, "spaced. Expected BOOLEAN") from ValueError
-            except IndexError:
-                pass
-        if sys.argv[i] == "-g" or sys.argv[i] == "-grid":
-            try:
-                grid = sys.argv[i+1]
-                if grid.lower() == "true" or grid.lower() == "t" or grid.lower() == "on":
-                    grid = True
-                elif grid.lower() == "false" or grid.lower() == "f" or grid.lower() == "off":
-                    grid = False
-                else:
-                    raise Exception(ERROR_MSG, "grid. Expected BOOLEAN") from ValueError
-            except IndexError:
-                pass
-        if sys.argv[i] == "-n" or sys.argv[i] == "-numbered":
-            try:
-                numbered = sys.argv[i+1]
-                if numbered.lower() == "true" or numbered.lower() == "t":
-                    numbered = True
-                elif numbered.lower() == "false" or numbered.lower() == "f":
-                    numbered = False
-                else:
-                    raise Exception(ERROR_MSG, "numbered. Expected BOOLEAN") from ValueError
-            except IndexError:
-                pass
-        if sys.argv[i] == "-w" or sys.argv[i] == "-weight":
+        if sys.argv[i].lower() == "-w" or sys.argv[i].lower() == "-weight":
             try:
                 line_width = float(sys.argv[i+1])
             except ValueError:
                 raise Exception(ERROR_MSG, "weight flag. Expected FLOAT") from ValueError
             except IndexError:
                 pass
-        if sys.argv[i] == "-c":
-            try:
-                labels = sys.argv[i+1]
-                if labels.lower() == "true" or labels.lower() == "t":
-                    labels = True
-                elif labels.lower() == "false" or labels.lower() == "f":
-                    labels = False
-                else:
-                    raise Exception(ERROR_MSG) from ValueError
-            except IndexError:
-                pass
-
-    assert(not (spaced == False and numbered == True))  # TODO: change flags, avoid this
+        if sys.argv[i].lower() == "-s" or sys.argv[i].lower() == "-spaced":
+            spaced = True
+        if sys.argv[i].lower() == "-g" or sys.argv[i].lower() == "-grid":
+            grid = True
+        if sys.argv[i].lower() == "-n" or sys.argv[i].lower() == "-numbered":
+            numbered = True
+            spaced = True  # input won't be read properly otherwise
+        if sys.argv[i].lower() == "-l":
+            labels = True
 
     maze = read_maze()
 
