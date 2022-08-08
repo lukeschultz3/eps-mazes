@@ -98,7 +98,7 @@ def print_wall_hori(row, col):
     print("closepath")
     print("stroke")
 
-def print_num(row, col, num):
+def print_num(row, col, num, color=(0.8, 0, 0)):
     print("1 setlinewidth")
     print("newpath")
     print("/Sans-Serif findfont")
@@ -110,7 +110,21 @@ def print_num(row, col, num):
         print((col-0.07)*cell_length, (row-0.7)*cell_length, "moveto")
     print("(", num, ") true charpath")
     print("closepath")
-    print("0.8 0 0 setrgbcolor")
+    print(color[0], color[1], color[2], "setrgbcolor")
+    print("stroke")
+    print("0 setgray")
+    print(line_width, "setlinewidth")
+
+def print_txt(row, col, txt, color=(0, 0, 0)):
+    print("1 setlinewidth")
+    print("newpath")
+    print("/Sans-Serif findfont")
+    print(cell_length//2, "scalefont")  # TODO: add flag to adjust
+    print("setfont")
+    print((col+0.07)*cell_length, (row-0.7)*cell_length, "moveto")
+    print("(", txt, ") true charpath")
+    print("closepath")
+    print(color[0], color[1], color[2], "setrgbcolor")
     print("stroke")
     print("0 setgray")
     print(line_width, "setlinewidth")
@@ -207,9 +221,11 @@ if __name__=="__main__":
             if maze[i][j].lower() == "w":
                 print_cell(total_rows - row, col, (255, 255, 255))
             elif maze[i][j].lower() == "s":
-                print_cell(total_rows - row, col, (0, 255, 0))
+                print_cell(total_rows - row, col, (0.80, 0, 0))
+                print_txt(total_rows-row, col, "S", (1, 1, 1))
             elif maze[i][j].lower() == "g":
-                print_cell(total_rows - row, col, (255, 0, 0))
+                print_cell(total_rows - row, col, (0, 0.80, 0))
+                print_txt(total_rows-row, col, "G", (1, 1, 1))
             elif numbered and not maze[i][j] == " " and not maze[i][j].lower() == "x":
                 try:
                     print_num(total_rows-row, col, int(maze[i][j]))
