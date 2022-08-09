@@ -15,7 +15,7 @@ Example execution:
 | Spaced Input  | `-s` | Enables spaced input, meaning the input file has spaces between each cell. |
 | Grid Coloring | `-g` | Enables grid coloring to distinguish cells. |
 | Numbered | `-n` | Enables cell numbering.<br />Note that the input file must contain cell numbers. |
-| Labels | `-c` | Enables grid labels |
+| Labels | `-l` | Enables axis labels |
 
 ## Line Mode
 A maze displayed in line mode has lines for walls (as opposed to cells):\
