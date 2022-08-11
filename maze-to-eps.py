@@ -6,7 +6,7 @@
 #
 # written by Luke Schultz
 # created on July 5, 2022
-# last edited on August 8, 2022
+# last edited on August 11, 2022
 
 
 import sys
@@ -156,6 +156,10 @@ def print_labels(rows, cols):
 if __name__=="__main__":
 
     for i in range(1, len(sys.argv)):
+        if sys.argv[i].lower() == "-h" or sys.argv[i].lower() == "-help":
+            with open("help.txt", "r") as f:
+                print(f.read())
+                exit()
         if sys.argv[i].lower() == "-c" or sys.argv[i].lower() == "-cell":
             try:
                 cell_length = int(sys.argv[i+1])

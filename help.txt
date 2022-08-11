@@ -1,0 +1,15 @@
+-c  Cell Size       Specifies cell size, takes integer for value
+
+-w  Line Weight     Specifies line wall weight, takes float for value
+
+-m  Wall Mode       Specifies line or cell mode, takes 'line' or 'cell' for
+                    value
+
+-s  Spaced Input    Enables spaced input, meaning the input file has spaces
+                    between each cell
+
+-g  Grid Coloring   Enables grid coloring to distinguish cells
+
+-n  Numbering       Enables cell numbering
+
+-l  Labels          Enables axis labels
