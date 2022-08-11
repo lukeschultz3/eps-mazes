@@ -14,7 +14,7 @@ Example execution:
 | Wall Mode | `-m` | Specifies line or cell mode, takes `line` or `cell` for value.<br />Default: `line` |
 | Spaced Input  | `-s` | Enables spaced input, meaning the input file has spaces between each cell. |
 | Grid Coloring | `-g` | Enables grid coloring to distinguish cells. |
-| Numbered | `-n` | Enables cell numbering.<br />Note that the input file must contain cell numbers. |
+| Numbering | `-n` | Enables cell numbering.<br />Note that the input file must contain cell numbers. |
 | Labels | `-l` | Enables axis labels |
 
 ## Line Mode
