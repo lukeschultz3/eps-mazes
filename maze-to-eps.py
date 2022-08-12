@@ -56,6 +56,8 @@ def print_head(rows, cols):
     print("%%EndComments")
     print(line_width, "setlinewidth")
     print("1 setlinejoin")
+    print("/NumRows", rows, "def")
+    print("/NumCols", cols, "def")
     print("/Lightgray 0.95 def")
     print("/Darkgray 0.9 def")
     print("/CellSize 20 def")
@@ -63,7 +65,7 @@ def print_head(rows, cols):
 /Square         % col row Square
 { %def
     /Row exch def % Row and Col reversed on stack
-    /Col exch d			
+    /Col exch def
     Col CellSize mul Row CellSize mul moveto
     Col 1 add CellSize mul Row CellSize mul lineto
     Col 1 add CellSize mul Row 1 add CellSize mul lineto
@@ -72,16 +74,24 @@ def print_head(rows, cols):
 """)
 
 def print_grid(rows, cols):
-    for row in range(rows):
-        for col in range(cols):
-            print("newpath")
-            print(col, row, "Square")
-            print("closepath")
-            if (row+col) % 2 == 0:
-                print("Lightgray setgray")
-            else:
-                print("Darkgray setgray")
-            print("fill")
+    print("""
+% draw grid with nested for loop
+0 1 NumRows {
+    /i exch def
+    0 1 NumCols {
+        /j exch def
+        newpath
+        i j Square
+        closepath
+        i j add 2 mod 0 eq {
+            Lightgray setgray
+        } {
+            Darkgray setgray
+        } ifelse
+        fill
+    } for
+} for
+    """)
     print("0 setgray")
 
 def print_cell(row, col, color=(0,0,0)):
