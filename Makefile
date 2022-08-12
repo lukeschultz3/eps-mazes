@@ -37,4 +37,4 @@ all:
 	make maze6
 
 clean:
-	rm *.eps
+	find *.eps ! -name func_defs.eps -delete

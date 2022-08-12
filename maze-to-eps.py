@@ -61,33 +61,11 @@ def print_head(rows, cols):
     print("/Lightgray 0.95 def")
     print("/Darkgray 0.9 def")
     print("/CellSize", cell_length, "def")
-    print("""
-/Square         % col row Square
-{ %def
-    /Row exch def % Row and Col reversed on stack
-    /Col exch def
-    Col CellSize mul Row CellSize mul moveto
-    Col 1 add CellSize mul Row CellSize mul lineto
-    Col 1 add CellSize mul Row 1 add CellSize mul lineto
-    Col CellSize mul Row 1 add CellSize mul lineto
-} def
+    print("/FontSize CellSize 2 div def")
 
-/VertWall
-{
-    /Row exch def
-    /Col exch def
-    Col CellSize mul Row CellSize mul moveto
-    Col CellSize mul Row 1 sub CellSize mul lineto
-} def
+    with open("func_defs.eps", "r") as f:
+        print(f.read())
 
-/HoriWall
-{
-    /Row exch def
-    /Col exch def
-    Col CellSize mul Row CellSize mul moveto
-    Col 1 add CellSize mul Row CellSize mul lineto
-} def
-""")
 
 def print_grid(rows, cols):
     print("""
@@ -111,21 +89,11 @@ def print_grid(rows, cols):
     print("0 setgray")
 
 def print_num(row, col, num, color=(0.8, 0, 0)):
-    print("1 setlinewidth")
-    print("newpath")
-    print("/Sans-Serif findfont")
-    print(cell_length//2, "scalefont")  # TODO: add flag to adjust
-    print("setfont")
     if 0 <= int(num) <= 9:
-        print((col+0.07)*cell_length, (row-0.7)*cell_length, "moveto")
+        print(int((col+0.07)*cell_length), int((row-0.7)*cell_length), "moveto")
     else:
-        print((col-0.07)*cell_length, (row-0.7)*cell_length, "moveto")
+        print(int((col-0.07)*cell_length), int((row-0.7)*cell_length), "moveto")
     print("(", num, ") true charpath")
-    print("closepath")
-    print(color[0], color[1], color[2], "setrgbcolor")
-    print("stroke")
-    print("0 setgray")
-    print(line_width, "setlinewidth")
 
 def print_txt(row, col, txt, color=(0, 0, 0)):
     print("1 setlinewidth")
@@ -255,6 +223,7 @@ if __name__=="__main__":
                 print("fill")
                 print_txt(total_rows-row, col, "G", (1, 1, 1))
             elif numbered and not maze[i][j] == " " and not maze[i][j].lower() == "x":
+                continue
                 try:
                     print_num(total_rows-row, col, int(maze[i][j]))
                 except:
@@ -262,6 +231,39 @@ if __name__=="__main__":
                         print_num(total_rows-row, col, float(maze[i][j]))
                     except:
                         exit()
+
+    print("1 setlinewidth")
+    print("newpath")
+    print("/Sans-Serif findfont")
+    print("FontSize scalefont")  # TODO: add flag to adjust
+    print("setfont")
+    row = 0
+    col = 0
+    for i in range(len(maze)):
+        for j in range(len(maze[i])):
+            if mode == "line":
+                row = i // 2
+                col = j // 2
+            elif mode == "cell":
+                row = i
+                col = j
+
+            if numbered and not maze[i][j].lower() in ["w", "s", "g", "x", " "]:
+                try:
+                    print_num(total_rows-row, col, int(maze[i][j]))
+                except:
+                    try:
+                        print_num(total_rows-row, col, float(maze[i][j]))
+                    except:
+                        # TODO: throw error
+                        exit()
+
+    print("closepath")
+    #print(color[0], color[1], color[2], "setrgbcolor") #TODO
+    print(0.8, 0, 0, "setrgbcolor") #TODO
+    print("stroke")
+    print("0 setgray")
+    print(line_width, "setlinewidth")
 
     # display walls
     # note: display walls after everything else to improve visuals
