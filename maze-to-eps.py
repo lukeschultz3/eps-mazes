@@ -96,10 +96,11 @@ def print_grid(rows, cols):
 
 def print_cell(row, col, color=(0,0,0)):
     print("newpath")
-    print(col*cell_length, row*cell_length, "moveto")
-    print((col+1)*cell_length, row*cell_length, "lineto")
-    print((col+1)*cell_length, (row-1)*cell_length, "lineto")
-    print(col*cell_length, (row-1)*cell_length, "lineto")
+    print(col, row, "Square")
+    #print(col*cell_length, row*cell_length, "moveto")
+    #print((col+1)*cell_length, row*cell_length, "lineto")
+    #print((col+1)*cell_length, (row-1)*cell_length, "lineto")
+    #print(col*cell_length, (row-1)*cell_length, "lineto")
     print("closepath")
     print(color[0], color[1], color[2], "setrgbcolor")
     print("fill")
@@ -244,12 +245,12 @@ if __name__=="__main__":
                 col = j
 
             if maze[i][j].lower() == "w":
-                print_cell(total_rows - row, col, (255, 255, 255))
+                print_cell(total_rows-row-1, col, (255, 255, 255))
             elif maze[i][j].lower() == "s":
-                print_cell(total_rows - row, col, (0.80, 0, 0))
+                print_cell(total_rows-row-1, col, (0.80, 0, 0))
                 print_txt(total_rows-row, col, "S", (1, 1, 1))
             elif maze[i][j].lower() == "g":
-                print_cell(total_rows - row, col, (0, 0.80, 0))
+                print_cell(total_rows-row-1, col, (0, 0.80, 0))
                 print_txt(total_rows-row, col, "G", (1, 1, 1))
             elif numbered and not maze[i][j] == " " and not maze[i][j].lower() == "x":
                 try:
@@ -280,7 +281,7 @@ if __name__=="__main__":
 
             elif maze[i][j].lower() == "x":
                 # draw wall in cell mode
-                print_cell(total_rows - i, j)
+                print_cell(total_rows-i-1, j)
 
     print("showpage")
 
