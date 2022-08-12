@@ -6,7 +6,7 @@
 #
 # written by Luke Schultz
 # created on July 5, 2022
-# last edited on August 11, 2022
+# last edited on August 12, 2022
 
 
 import sys
@@ -56,6 +56,8 @@ def print_head(rows, cols):
     print("%%EndComments")
     print(line_width, "setlinewidth")
     print("1 setlinejoin")
+    print("/Lightgray 0.95 def")
+    print("/Darkgray 0.9 def")
 
 def print_grid(rows, cols):
     for row in range(rows):
@@ -67,9 +69,9 @@ def print_grid(rows, cols):
             print(col*cell_length, (row+1)*cell_length, "lineto")
             print("closepath")
             if (row+col) % 2 == 0:
-                print("0.95 setgray")
+                print("Lightgray setgray")
             else:
-                print("0.9 setgray")
+                print("Darkgray setgray")
             print("fill")
     print("0 setgray")
 
