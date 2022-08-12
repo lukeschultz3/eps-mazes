@@ -60,7 +60,7 @@ def print_head(rows, cols):
     print("/NumCols", cols, "def")
     print("/Lightgray 0.95 def")
     print("/Darkgray 0.9 def")
-    print("/CellSize 20 def")
+    print("/CellSize", cell_length, "def")
     print("""
 /Square         % col row Square
 { %def
@@ -70,6 +70,22 @@ def print_head(rows, cols):
     Col 1 add CellSize mul Row CellSize mul lineto
     Col 1 add CellSize mul Row 1 add CellSize mul lineto
     Col CellSize mul Row 1 add CellSize mul lineto
+} def
+
+/VertWall
+{
+    /Row exch def
+    /Col exch def
+    Col CellSize mul Row CellSize mul moveto
+    Col CellSize mul Row 1 sub CellSize mul lineto
+} def
+
+/HoriWall
+{
+    /Row exch def
+    /Col exch def
+    Col CellSize mul Row CellSize mul moveto
+    Col 1 add CellSize mul Row CellSize mul lineto
 } def
 """)
 
@@ -93,20 +109,6 @@ def print_grid(rows, cols):
 } for
     """)
     print("0 setgray")
-
-def print_wall_vert(row, col):
-    print("newpath")
-    print(col*cell_length, row*cell_length, "moveto")
-    print(col*cell_length, (row-1)*cell_length, "lineto")
-    print("closepath")
-    print("stroke")
-
-def print_wall_hori(row, col):
-    print("newpath")
-    print(col*cell_length, row*cell_length, "moveto")
-    print((col+1)*cell_length, row*cell_length, "lineto")
-    print("closepath")
-    print("stroke")
 
 def print_num(row, col, num, color=(0.8, 0, 0)):
     print("1 setlinewidth")
@@ -276,6 +278,7 @@ if __name__=="__main__":
         print("0 setgray")
         print("fill")
     else:
+        print("newpath")
         for i in range(len(maze)):
             for j in range(len(maze[i])):
                 if maze[i][j].lower() == "x":
@@ -286,9 +289,13 @@ if __name__=="__main__":
                     row = i // 2
                     col = j // 2
                     if i % 2 == 0:
-                        print_wall_hori(total_rows-row, col)
+                        print(col, total_rows-row, "HoriWall")
+                        #print_wall_hori(total_rows-row, col)
                     elif j % 2 == 0:
-                        print_wall_vert(total_rows-row, col)
+                        print(col, total_rows-row, "VertWall")
+                        #print_wall_vert(total_rows-row, col)
+        print("closepath")
+        print("stroke")
 
     print("showpage")
 
