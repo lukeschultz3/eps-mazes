@@ -94,18 +94,6 @@ def print_grid(rows, cols):
     """)
     print("0 setgray")
 
-def print_cell(row, col, color=(0,0,0)):
-    print("newpath")
-    print(col, row, "Square")
-    #print(col*cell_length, row*cell_length, "moveto")
-    #print((col+1)*cell_length, row*cell_length, "lineto")
-    #print((col+1)*cell_length, (row-1)*cell_length, "lineto")
-    #print(col*cell_length, (row-1)*cell_length, "lineto")
-    print("closepath")
-    print(color[0], color[1], color[2], "setrgbcolor")
-    print("fill")
-    print("0 0 0 setrgbcolor")
-
 def print_wall_vert(row, col):
     print("newpath")
     print(col*cell_length, row*cell_length, "moveto")
@@ -245,12 +233,24 @@ if __name__=="__main__":
                 col = j
 
             if maze[i][j].lower() == "w":
-                print_cell(total_rows-row-1, col, (255, 255, 255))
+                print("newpath")
+                print(col, total_rows-row-1, "Square")
+                print("closepath")
+                print(1, "setgray")
+                print("fill")
             elif maze[i][j].lower() == "s":
-                print_cell(total_rows-row-1, col, (0.80, 0, 0))
+                print("newpath")
+                print(col, total_rows-row-1, "Square")
+                print("closepath")
+                print(0.8, 0, 0, "setrgbcolor")
+                print("fill")
                 print_txt(total_rows-row, col, "S", (1, 1, 1))
             elif maze[i][j].lower() == "g":
-                print_cell(total_rows-row-1, col, (0, 0.80, 0))
+                print("newpath")
+                print(col, total_rows-row-1, "Square")
+                print("closepath")
+                print(0, 0.8, 0, "setrgbcolor")
+                print("fill")
                 print_txt(total_rows-row, col, "G", (1, 1, 1))
             elif numbered and not maze[i][j] == " " and not maze[i][j].lower() == "x":
                 try:
@@ -265,23 +265,30 @@ if __name__=="__main__":
     # note: display walls after everything else to improve visuals
     row = 0
     col = 0
-    for i in range(len(maze)):
-        for j in range(len(maze[i])):
-            if mode == "line" and maze[i][j].lower() == "x":
-                # draw wall in line mode
-                if i % 2 == 0 and j % 2 == 0:
-                    continue
 
-                row = i // 2
-                col = j // 2
-                if i % 2 == 0:
-                    print_wall_hori(total_rows-row, col)
-                elif j % 2 == 0:
-                    print_wall_vert(total_rows-row, col)
+    if mode == "cell":
+        print("newpath")
+        for i in range(len(maze)):
+            for j in range(len(maze[i])):
+                if maze[i][j].lower() == "x":
+                    print(j, total_rows-i-1, "Square")
+        print("closepath")
+        print("0 setgray")
+        print("fill")
+    else:
+        for i in range(len(maze)):
+            for j in range(len(maze[i])):
+                if maze[i][j].lower() == "x":
+                    # draw wall in line mode
+                    if i % 2 == 0 and j % 2 == 0:
+                        continue
 
-            elif maze[i][j].lower() == "x":
-                # draw wall in cell mode
-                print_cell(total_rows-i-1, j)
+                    row = i // 2
+                    col = j // 2
+                    if i % 2 == 0:
+                        print_wall_hori(total_rows-row, col)
+                    elif j % 2 == 0:
+                        print_wall_vert(total_rows-row, col)
 
     print("showpage")
 
