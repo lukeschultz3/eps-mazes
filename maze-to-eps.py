@@ -53,15 +53,21 @@ def print_head(rows, cols):
         print("%%BoundingBox:", -line_width, -line_width,
               cols*cell_length+line_width, rows*cell_length+line_width)
     print("%%Pages: 0")
-    print("%%EndComments")
+    print("%%EndComments\n")
     print(line_width, "setlinewidth")
-    print("1 setlinejoin")
+    print("1 setlinejoin\n")
+
     print("/NumRows", rows, "def")
     print("/NumCols", cols, "def")
     print("/Lightgray 0.95 def")
     print("/Darkgray 0.9 def")
     print("/CellSize", cell_length, "def")
-    print("/FontSize CellSize 2 div def")
+    print("/FontSize CellSize 2 div def\n")
+
+    print("% set font")
+    print("/Sans-Serif findfont")
+    print("FontSize scalefont")  # TODO: add flag to adjust
+    print("setfont\n")
 
     with open("func_defs.eps", "r") as f:
         print(f.read())
@@ -69,7 +75,7 @@ def print_head(rows, cols):
 
 def print_grid(rows, cols):
     print("""
-% draw grid with nested for loop
+% display grid with nested for loop
 0 1 NumRows {
     /i exch def
     0 1 NumCols {
@@ -98,10 +104,7 @@ def print_num(row, col, num, color=(0.8, 0, 0)):
 def print_txt(row, col, txt, color=(0, 0, 0)):
     print("1 setlinewidth")
     print("newpath")
-    print("/Sans-Serif findfont")
-    print(cell_length//2, "scalefont")  # TODO: add flag to adjust
-    print("setfont")
-    print((col+0.07)*cell_length, (row-0.7)*cell_length, "moveto")
+    print(int((col+0.07)*cell_length), int((row-0.7)*cell_length), "moveto")
     print("(", txt, ") true charpath")
     print("closepath")
     print(color[0], color[1], color[2], "setrgbcolor")
@@ -110,28 +113,32 @@ def print_txt(row, col, txt, color=(0, 0, 0)):
     print(line_width, "setlinewidth")
 
 def print_labels(rows, cols):
+    print("% display axis labels")
     print("0.8 0 0 setrgbcolor")
     print("1 setlinewidth")
-    print("/Sans-Serif findfont")
-    print(cell_length//2, "scalefont")
-    print("setfont")
-
-    for col in range(cols):
-        print("newpath")
-        print(col*cell_length, rows*cell_length+(cell_length*0.2), "moveto")
-        print("(", chr((col%26)+65), ") true charpath")
-        print("closepath")
-        print("stroke")
-
-    for row in range(rows):
-        print("newpath")
-        print(-(cell_length*0.75), (rows-row-0.75)*(cell_length), "moveto")
-        print("(", row+1, ") true charpath")
-        print("closepath")
-        print("stroke")
-
+    print("newpath")
+    print("/a [ ", end="")
+    for i in range(cols+1):
+        print("(", end="")
+        for j in range((i // 26) + 1):
+            print(chr((i%26)+65), end="")
+        print(") ", end="")
+    print("] def", end="")
+    print("""
+0 1 NumCols {
+    /Col exch def
+    Col CellSize mul CellSize 0.35 mul add  NumRows CellSize mul CellSize 0.2 mul add moveto
+    a Col get true charpath
+} for
+0 1 NumRows {
+    /Row exch def
+    CellSize 0.45 mul -1 mul NumRows Row sub 0.75 sub CellSize mul moveto
+    Row 1 add 3 string cvs true charpath
+} for""")
+    print("closepath")
+    print("stroke")
     print("0 setgray")
-    print(line_width, "setlinewidth")
+    print(line_width, "setlinewidth\n")
 
 if __name__=="__main__":
 
@@ -190,7 +197,8 @@ if __name__=="__main__":
     if labels:
         print_labels(total_rows, total_cols)
 
-    # display everything that isn't a wall
+    # display white cells
+    displayed = False
     row = 0
     col = 0
     for i in range(len(maze)):
@@ -203,12 +211,36 @@ if __name__=="__main__":
                 col = j
 
             if maze[i][j].lower() == "w":
-                print("newpath")
+                if not displayed:
+                    print("% display white cells")
+                    print("newpath")
+                    displayed = True
+
                 print(col, total_rows-row-1, "Square")
-                print("closepath")
-                print(1, "setgray")
-                print("fill")
-            elif maze[i][j].lower() == "s":
+    if displayed:
+        print("closepath")
+        print("1 setgray")
+        print("fill\n")
+
+    # display everything that isn't a wall or white cell
+    displayed = False
+    row = 0
+    col = 0
+    for i in range(len(maze)):
+        for j in range(len(maze[i])):
+            if mode == "line":
+                row = i // 2
+                col = j // 2
+            elif mode == "cell":
+                row = i
+                col = j
+
+            if not displayed and maze[i][j].lower() in ["s", "g"]:
+                # only print header if necessary
+                print("% display every non-wall and non-white cell")
+                displayed = True
+
+            if maze[i][j].lower() == "s":
                 print("newpath")
                 print(col, total_rows-row-1, "Square")
                 print("closepath")
@@ -222,48 +254,40 @@ if __name__=="__main__":
                 print(0, 0.8, 0, "setrgbcolor")
                 print("fill")
                 print_txt(total_rows-row, col, "G", (1, 1, 1))
-            elif numbered and not maze[i][j] == " " and not maze[i][j].lower() == "x":
-                continue
-                try:
-                    print_num(total_rows-row, col, int(maze[i][j]))
-                except:
+    if displayed:
+        print("\n")
+
+    if numbered:
+        print("% display cell numbers")
+        print("1 setlinewidth")
+        print("newpath")
+        row = 0
+        col = 0
+        for i in range(len(maze)):
+            for j in range(len(maze[i])):
+                if mode == "line":
+                    row = i // 2
+                    col = j // 2
+                elif mode == "cell":
+                    row = i
+                    col = j
+
+                if not maze[i][j].lower() in ["w", "s", "g", "x", " "]:
                     try:
-                        print_num(total_rows-row, col, float(maze[i][j]))
+                        print_num(total_rows-row, col, int(maze[i][j]))
                     except:
-                        exit()
+                        try:
+                            print_num(total_rows-row, col, float(maze[i][j]))
+                        except:
+                            # TODO: throw error
+                            exit()
 
-    print("1 setlinewidth")
-    print("newpath")
-    print("/Sans-Serif findfont")
-    print("FontSize scalefont")  # TODO: add flag to adjust
-    print("setfont")
-    row = 0
-    col = 0
-    for i in range(len(maze)):
-        for j in range(len(maze[i])):
-            if mode == "line":
-                row = i // 2
-                col = j // 2
-            elif mode == "cell":
-                row = i
-                col = j
-
-            if numbered and not maze[i][j].lower() in ["w", "s", "g", "x", " "]:
-                try:
-                    print_num(total_rows-row, col, int(maze[i][j]))
-                except:
-                    try:
-                        print_num(total_rows-row, col, float(maze[i][j]))
-                    except:
-                        # TODO: throw error
-                        exit()
-
-    print("closepath")
-    #print(color[0], color[1], color[2], "setrgbcolor") #TODO
-    print(0.8, 0, 0, "setrgbcolor") #TODO
-    print("stroke")
-    print("0 setgray")
-    print(line_width, "setlinewidth")
+        print("closepath")
+        #print(color[0], color[1], color[2], "setrgbcolor") #TODO
+        print(0.8, 0, 0, "setrgbcolor") #TODO
+        print("stroke")
+        print("0 setgray")
+        print(line_width, "setlinewidth\n")
 
     # display walls
     # note: display walls after everything else to improve visuals
@@ -271,6 +295,7 @@ if __name__=="__main__":
     col = 0
 
     if mode == "cell":
+        print("% display walls (cell mode)")
         print("newpath")
         for i in range(len(maze)):
             for j in range(len(maze[i])):
@@ -278,8 +303,9 @@ if __name__=="__main__":
                     print(j, total_rows-i-1, "Square")
         print("closepath")
         print("0 setgray")
-        print("fill")
+        print("fill\n")
     else:
+        print("% display walls (line mode)")
         print("newpath")
         for i in range(len(maze)):
             for j in range(len(maze[i])):
@@ -297,7 +323,7 @@ if __name__=="__main__":
                         print(col, total_rows-row, "VertWall")
                         #print_wall_vert(total_rows-row, col)
         print("closepath")
-        print("stroke")
+        print("stroke\n")
 
     print("showpage")
 
