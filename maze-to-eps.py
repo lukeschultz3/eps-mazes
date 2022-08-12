@@ -58,15 +58,24 @@ def print_head(rows, cols):
     print("1 setlinejoin")
     print("/Lightgray 0.95 def")
     print("/Darkgray 0.9 def")
+    print("/CellSize 20 def")
+    print("""
+/Square         % col row Square
+{ %def
+    /Row exch def % Row and Col reversed on stack
+    /Col exch d			
+    Col CellSize mul Row CellSize mul moveto
+    Col 1 add CellSize mul Row CellSize mul lineto
+    Col 1 add CellSize mul Row 1 add CellSize mul lineto
+    Col CellSize mul Row 1 add CellSize mul lineto
+} def
+""")
 
 def print_grid(rows, cols):
     for row in range(rows):
         for col in range(cols):
             print("newpath")
-            print(col*cell_length, row*cell_length, "moveto")
-            print((col+1)*cell_length, row*cell_length, "lineto")
-            print((col+1)*cell_length, (row+1)*cell_length, "lineto")
-            print(col*cell_length, (row+1)*cell_length, "lineto")
+            print(col, row, "Square")
             print("closepath")
             if (row+col) % 2 == 0:
                 print("Lightgray setgray")
