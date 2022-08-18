@@ -6,7 +6,7 @@
 #
 # written by Luke Schultz
 # created on July 5, 2022
-# last edited on August 12, 2022
+# last edited on August 15, 2022
 
 
 import sys
@@ -90,9 +90,8 @@ def print_grid(rows, cols):
         } ifelse
         fill
     } for
-} for
-    """)
-    print("0 setgray")
+} for""")
+    print("0 setgray\n")
 
 def print_num(row, col, num, color=(0.8, 0, 0)):
     if 0 <= int(num) <= 9:
