@@ -76,14 +76,14 @@ def print_head(rows, cols):
 def print_grid(rows, cols):
     print("""
 % display grid with nested for loop
-0 1 NumRows {
+0 1 NumRows 1 sub {
     /i exch def
-    0 1 NumCols {
+    0 1 NumCols 1 sub {
         /j exch def
         newpath
-        i j Square
+        j i Square
         closepath
-        i j add 2 mod 0 eq {
+        j i add 2 mod 0 eq {
             Lightgray setgray
         } {
             Darkgray setgray
