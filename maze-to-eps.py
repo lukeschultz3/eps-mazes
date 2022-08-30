@@ -6,7 +6,7 @@
 #
 # written by Luke Schultz
 # created on July 5, 2022
-# last edited on August 15, 2022
+# last edited on August 30, 2022
 
 
 import sys
@@ -69,8 +69,11 @@ def print_head(rows, cols):
     print("FontSize scalefont")  # TODO: add flag to adjust
     print("setfont\n")
 
-    with open("func_defs.eps", "r") as f:
+    with open("func_def_square.eps", "r") as f:
         print(f.read())
+    if mode == "line":
+        with open("func_def_walls.eps", "r") as f:
+            print(f.read())
 
 
 def print_grid(rows, cols):

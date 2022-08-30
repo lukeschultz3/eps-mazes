@@ -1,0 +1,9 @@
+/Square     % col row Square
+{
+    /Row exch def
+    /Col exch def
+    Col CellSize mul Row CellSize mul moveto
+    Col 1 add CellSize mul Row CellSize mul lineto
+    Col 1 add CellSize mul Row 1 add CellSize mul lineto
+    Col CellSize mul Row 1 add CellSize mul lineto
+} def
